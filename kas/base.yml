@@ -1,0 +1,57 @@
+header:
+  version: 16
+
+machine: milkv-mars
+distro: poky
+target:
+  - meta-multimedia-image-all
+
+defaults:
+  repos:
+    branch: scarthgap
+
+repos:
+  meta-milkv:
+    path: meta-milkv
+
+  poky:
+    url: https://git.yoctoproject.org/git/poky.git
+    commit: dce4163d42f7036ea216b52b9135968d51bec4c1
+    path: layers/poky
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:
+
+  meta-openembedded:
+    url: https://git.openembedded.org/meta-openembedded
+    commit: 2e3126c9c16bb3df0560f6b3896d01539a3bfad7
+    path: layers/meta-openembedded
+    layers:
+      meta-oe:
+      meta-python:
+      meta-networking:
+      meta-multimedia:
+
+local_conf_header:
+  reduce_diskspace: |
+    INHERIT += "rm_work"
+  dismon: |
+    BB_DISKMON_DIRS ??= "\
+        STOPTASKS,${TMPDIR},1G,100K \
+        STOPTASKS,${DL_DIR},1G,100K \
+        STOPTASKS,${SSTATE_DIR},1G,100K \
+        STOPTASKS,/tmp,100M,100K \
+        HALT,${TMPDIR},100M,1K \
+        HALT,${DL_DIR},100M,1K \
+        HALT,${SSTATE_DIR},100M,1K \
+        HALT,/tmp,10M,1K"
+  standard: |
+    CONF_VERSION = "2"
+    PACKAGE_CLASSES = "package_rpm"
+    USER_CLASSES ?= "buildstats"
+    IMAGE_INSTALL:append = " kernel-modules devmem2 i2c-tools libgpiod"
+  debug-tweaks: |
+    EXTRA_IMAGE_FEATURES = "debug-tweaks"
+  licenses: |
+    LICENSE_FLAGS_ACCEPTED = "commercial"
