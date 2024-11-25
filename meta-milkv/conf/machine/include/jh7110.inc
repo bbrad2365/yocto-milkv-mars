@@ -32,3 +32,10 @@ WKS_FILE_DEPENDS:append = " u-boot"
 # Common SBI Configuration
 RISCV_SBI_PLAT = "generic"
 #============================================
+
+#============================================
+# Common Uboot Configuration
+UBOOT_ENTRYPOINT = "0x40200000"
+UBOOT_DTB_LOADADDRESS = "0x46000000"
+UBOOT_RD_LOADADDRESS = "0x46100000"
+#============================================
